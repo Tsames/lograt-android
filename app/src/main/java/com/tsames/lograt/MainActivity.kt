@@ -1,27 +1,74 @@
 package com.tsames.lograt
 
 import android.content.Intent
-import android.os.Build.VERSION_CODES.N
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import java.util.Calendar
 import kotlin.jvm.java
+import java.util.Date
 
 class MainActivity : BaseActivity() {
+    private lateinit var workoutAdapter: WorkoutAdapter
+    private val workouts = mutableListOf<WorkoutModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
+        // Toolbar
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setupToolbar(toolbar, "Home", showUpButton = false)
 
+        // Helper function to create a Date object for a specific day in May
+        fun createDate(day: Int): Date {
+            val calendar = Calendar.getInstance()
+            calendar.set(2025, Calendar.MAY, day) // Year: 2023, Month: May, Day: specified day
+            return calendar.time
+        }
+
+        // Dummy Workouts
+        workouts.addAll(
+            listOf(
+                WorkoutModel(1, createDate(12), "Chest & Triceps Day", WorkoutType
+                    .Chest),
+                WorkoutModel(2, createDate(13), "Leg Day", WorkoutType.Legs),
+                WorkoutModel(3, createDate(14), "Back & Biceps Day", WorkoutType.Back),
+                WorkoutModel(4, createDate(15), "Shoulders & Abs", WorkoutType
+                    .Shoulders)
+            )
+        )
+
+        // Recent Workouts Grid
+        val workoutGrid = findViewById<RecyclerView>(R.id.workoutGrid)
+        workoutGrid.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        workoutAdapter = WorkoutAdapter(workouts) { workout ->
+            val intent = Intent(this, WorkoutLog::class.java)
+            intent.putExtra("WORKOUT_ID", workout.id)
+            intent.putExtra("WORKOUT_NAME", workout.name)
+            intent.putExtra("WORKOUT_DATE", workout.date.time) // Pass date as a timestamp
+            intent.putExtra("WORKOUT_TAG", workout.type?.name) // Pass tag as a string
+            startActivity(intent)
+        }
+        workoutGrid.adapter = workoutAdapter
+
+        // Create workout button & Listener
         val workoutButton = findViewById<Button>(R.id.workoutButton)
         workoutButton.setOnClickListener {
-            val intent = Intent(this, Workout::class.java)
+            val newWorkout = WorkoutModel(workouts.size + 1, Date(),"Workout ${workouts.size + 
+                    1}", null)
+            workoutAdapter.addWorkout(newWorkout)
+            workoutGrid.apply {
+                layoutManager?.scrollToPosition(0) // Scroll to the top
+            }
+
+            val intent = Intent(this, WorkoutLog::class.java)
+            intent.putExtra("WORKOUT_ID", newWorkout.id)
             startActivity(intent)
         }
 
