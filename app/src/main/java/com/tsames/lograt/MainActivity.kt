@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlin.jvm.java
 
@@ -23,12 +24,12 @@ class MainActivity : BaseActivity() {
         setupToolbar(toolbar, "Home", showUpButton = false)
 
         val workoutGrid = findViewById<RecyclerView>(R.id.workoutGrid)
+        workoutGrid.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         workoutAdapter = WorkoutAdapter(workouts) { workout ->
             val intent = Intent(this, Workout::class.java)
             intent.putExtra("WORKOUT_ID", workout.id)
             startActivity(intent)
         }
-        workoutGrid.layoutManager = GridLayoutManager(this, 2)
         workoutGrid.adapter = workoutAdapter
 
         val workoutButton = findViewById<Button>(R.id.workoutButton)
