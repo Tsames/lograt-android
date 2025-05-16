@@ -10,14 +10,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import kotlin.jvm.java
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
-        val workoutButton = findViewById<Button>(R.id.workoutButton)
+        val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        setupToolbar(toolbar, "Home", showUpButton = false)
 
+        val workoutButton = findViewById<Button>(R.id.workoutButton)
         workoutButton.setOnClickListener {
             val intent = Intent(this, Workout::class.java)
             startActivity(intent)
