@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlin.collections.addAll
 import kotlin.jvm.java
 
 class MainActivity : BaseActivity() {
@@ -22,6 +23,15 @@ class MainActivity : BaseActivity() {
 
         val toolbar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         setupToolbar(toolbar, "Home", showUpButton = false)
+
+        workouts.addAll(
+            listOf(
+                Workout(1, "Chest & Triceps Day"),
+                Workout(2, "Leg Day"),
+                Workout(3, "Back & Biceps Day"),
+                Workout(4, "Shoulders & Abs")
+            )
+        )
 
         val workoutGrid = findViewById<RecyclerView>(R.id.workoutGrid)
         workoutGrid.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

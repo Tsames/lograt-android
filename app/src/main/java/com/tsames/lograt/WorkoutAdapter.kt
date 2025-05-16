@@ -32,7 +32,7 @@ class WorkoutAdapter(
     override fun getItemCount(): Int = workouts.size
 
     fun addWorkout(workout: Workout) {
-        workouts.add(workout)
-        notifyItemInserted(workouts.size - 1)
+        workouts.add(0, workout)
+        notifyItemInserted(0)
     }
 }
