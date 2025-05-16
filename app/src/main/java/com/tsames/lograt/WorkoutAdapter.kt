@@ -7,14 +7,14 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class WorkoutAdapter(
-    private val workouts: MutableList<Workout>,
-    private val onItemClick: (Workout) -> Unit
+    private val workouts: MutableList<WorkoutModel>,
+    private val onItemClick: (WorkoutModel) -> Unit
 ) : RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder>() {
 
     inner class WorkoutViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val workoutName: TextView = itemView.findViewById(R.id.workoutName)
 
-        fun bind(workout: Workout) {
+        fun bind(workout: WorkoutModel) {
             workoutName.text = workout.name
             itemView.setOnClickListener { onItemClick(workout) }
         }
@@ -31,7 +31,7 @@ class WorkoutAdapter(
 
     override fun getItemCount(): Int = workouts.size
 
-    fun addWorkout(workout: Workout) {
+    fun addWorkout(workout: WorkoutModel) {
         workouts.add(0, workout)
         notifyItemInserted(0)
     }

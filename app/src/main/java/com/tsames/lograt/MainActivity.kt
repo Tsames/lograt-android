@@ -6,15 +6,13 @@ import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlin.collections.addAll
 import kotlin.jvm.java
 
 class MainActivity : BaseActivity() {
     private lateinit var workoutAdapter: WorkoutAdapter
-    private val workouts = mutableListOf<Workout>()
+    private val workouts = mutableListOf<WorkoutModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,17 +24,17 @@ class MainActivity : BaseActivity() {
 
         workouts.addAll(
             listOf(
-                Workout(1, "Chest & Triceps Day"),
-                Workout(2, "Leg Day"),
-                Workout(3, "Back & Biceps Day"),
-                Workout(4, "Shoulders & Abs")
+                WorkoutModel(1, "Chest & Triceps Day"),
+                WorkoutModel(2, "Leg Day"),
+                WorkoutModel(3, "Back & Biceps Day"),
+                WorkoutModel(4, "Shoulders & Abs")
             )
         )
 
         val workoutGrid = findViewById<RecyclerView>(R.id.workoutGrid)
         workoutGrid.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         workoutAdapter = WorkoutAdapter(workouts) { workout ->
-            val intent = Intent(this, Workout::class.java)
+            val intent = Intent(this, WorkoutModel::class.java)
             intent.putExtra("WORKOUT_ID", workout.id)
             startActivity(intent)
         }
@@ -44,8 +42,11 @@ class MainActivity : BaseActivity() {
 
         val workoutButton = findViewById<Button>(R.id.workoutButton)
         workoutButton.setOnClickListener {
-            val newWorkout = Workout(workouts.size + 1, "Workout ${workouts.size + 1}")
+            val newWorkout = WorkoutModel(workouts.size + 1, "Workout ${workouts.size + 1}")
             workoutAdapter.addWorkout(newWorkout)
+            workoutGrid.apply {
+                layoutManager?.scrollToPosition(0) // Scroll to the top
+            }
 
             val intent = Intent(this, WorkoutLog::class.java)
             intent.putExtra("WORKOUT_ID", newWorkout.id)
