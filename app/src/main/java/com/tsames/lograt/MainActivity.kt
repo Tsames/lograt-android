@@ -50,6 +50,9 @@ class MainActivity : BaseActivity() {
         workoutAdapter = WorkoutAdapter(workouts) { workout ->
             val intent = Intent(this, WorkoutLog::class.java)
             intent.putExtra("WORKOUT_ID", workout.id)
+            intent.putExtra("WORKOUT_NAME", workout.name)
+            intent.putExtra("WORKOUT_DATE", workout.date.time) // Pass date as a timestamp
+            intent.putExtra("WORKOUT_TAG", workout.type?.name) // Pass tag as a string
             startActivity(intent)
         }
         workoutGrid.adapter = workoutAdapter
