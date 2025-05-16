@@ -1,3 +1,22 @@
 package com.tsames.lograt
 
-data class WorkoutModel (val id: Int, val name: String)
+import java.util.Date
+
+enum class WorkoutType {
+    Legs,
+    Chest,
+    Back,
+    Shoulders,
+    Abs,
+    Run,
+    Swim,
+    Bike,
+    Arms
+}
+
+data class WorkoutModel (
+    val id: Int,
+    val date: Date,
+    val name: String,
+    val type: WorkoutType?,
+)
